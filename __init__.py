@@ -127,7 +127,7 @@ class CortexView(BinaryView):
     def bv_finalized_callback(self, _bv):
         self.navigate(f'Linear:{self.name}', 0)
         chosen_mcu = self.get_load_settings(self.name
-                                           ).get_string('loader.cortex_m.mcu')
+                                           ).get_string('loader.cortex_m.mcu', self)
         assert chosen_mcu is not None
 
         mcu_lib = importlib.import_module(
@@ -161,7 +161,7 @@ class CortexView(BinaryView):
             Type.pointer(self.arch, Type.void(), const=True), self.platform
         )
 
-        reader = self.reader(0)
+        reader = self.reader(mcu.ROM_OFF)
 
         addr = reader.read32()
         self.define_auto_symbol(
